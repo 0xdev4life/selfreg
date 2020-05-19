@@ -35,18 +35,16 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use('/api/auth', authRoutes)
 
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('views/dist/self-register-mark-II'))
-    app.get('*', (req, res) => {
+app.use(express.static('views/dist/self-register-mark-II'))
+app.get('*', (req, res) => {
 
 
-        res.sendFile(
-            path.resolve(
-                __dirname, 'views', 'dist', 'self-register-mark-II', 'index.html'
-            )
+    res.sendFile(
+        path.resolve(
+            __dirname, 'views', 'dist', 'self-register-mark-II', 'index.html'
         )
-    })
-}
+    )
+})
 
 
 
