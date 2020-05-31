@@ -3,6 +3,8 @@ const mongoose         = require('mongoose')
 const passport         = require('passport')
 const path             = require('path')
 const authRoutes       = require('./routes/auth')
+const classRoutes      = require('./routes/class')
+const accountRoutes    = require('./routes/account')
 const bodyParser       = require('body-parser')
 const cors             = require('cors')
 const morgan           = require('morgan')
@@ -34,6 +36,8 @@ app.use(bodyParser.json())
 
 app.use(cors())
 app.use('/api/auth', authRoutes)
+app.use('/api/class', classRoutes)
+app.use('/api/account', accountRoutes)
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('views/dist/self-register-mark-II'))

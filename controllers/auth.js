@@ -8,29 +8,35 @@ const errorHandler = require('../utils/errorHandler')
 
 //===== mongo style
 module.exports.login = async function (req, res) {
+    try {
+        console.log('login in...')
+        console.log(req.body)
+        const candidate = await User.findOne({email: req.body.email})
 
-    const candidate = await User.findOne({email: req.body.email})
-    if (candidate) {
-        const passwordResult = bcrypt.compareSync(req.body.password, candidate.password)
-        if (passwordResult) {
-            const token = jwt.sign({
-                email:  candidate.email,
-                userId: candidate._id
-            }, keys.jwt, {expiresIn: keys.ExpireTime})
-            return await res.status(200).json({
-                token: `Bearer ${token}`,
-                name: candidate.username
-            })
-        } else {
-            return await res.status(401).json({
-                action: "UNAUTHORIZED"
+        if (candidate) {
+            const passwordResult = bcrypt.compareSync(req.body.password, candidate.password)
+            if (passwordResult) {
+                const token = jwt.sign({
+                    email:  candidate.email,
+                    userId: candidate._id
+                }, keys.jwt, {expiresIn: keys.ExpireTime})
+                return await res.status(200).json({
+                    token: `Bearer ${token}`,
+                    name: candidate.username
+                })
+            } else {
+                return await res.status(401).json({
+                    action: "UNAUTHORIZED"
+                })
+            }
+        }
+        else {
+            return await res.status(404).json({
+                action: "NOT_FOUND"
             })
         }
-    }
-    else {
-        return await res.status(404).json({
-            action: "NOT_FOUND"
-        })
+    } catch (e) {
+        errorHandler(e, req)
     }
 
 }
