@@ -5180,6 +5180,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _angular_material_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
     /*! @angular/material/button */
     "./node_modules/@angular/material/__ivy_ngcc__/fesm2015/button.js");
+    /* harmony import */
+
+
+    var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! @angular/router */
+    "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
+
+    var _c0 = function _c0() {
+      return ["/"];
+    };
 
     var ErrorComponent =
     /*#__PURE__*/
@@ -5204,8 +5214,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       type: ErrorComponent,
       selectors: [["app-error"]],
       decls: 9,
-      vars: 0,
-      consts: [["div", "", "fxLayout", "column", "fxLayoutAlign", "center center", 1, "block-one"], ["fxLayoutAlign", "center", 1, "error"], ["src", "assets/images/emoji.svg"], ["fxLayoutAlign", "center", 1, "text-main", "header", "error"], ["mat-raised-button", "", "color", "warn", 1, "button"]],
+      vars: 2,
+      consts: [["div", "", "fxLayout", "column", "fxLayoutAlign", "center center", 1, "block-one"], ["fxLayoutAlign", "center", 1, "error"], ["src", "assets/images/emoji.svg"], ["fxLayoutAlign", "center", 1, "text-main", "header", "error"], ["mat-raised-button", "", "color", "warn", 1, "button", 3, "routerLink"]],
       template: function ErrorComponent_Template(rf, ctx) {
         if (rf & 1) {
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
@@ -5238,8 +5248,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         }
+
+        if (rf & 2) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](7);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("routerLink", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpureFunction0"](1, _c0));
+        }
       },
-      directives: [_angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_1__["DefaultLayoutDirective"], _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_1__["DefaultLayoutAlignDirective"], _angular_material_button__WEBPACK_IMPORTED_MODULE_2__["MatButton"]],
+      directives: [_angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_1__["DefaultLayoutDirective"], _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_1__["DefaultLayoutAlignDirective"], _angular_material_button__WEBPACK_IMPORTED_MODULE_2__["MatButton"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterLink"]],
       styles: [".error[_ngcontent-%COMP%] {\r\n  margin: 15px;\r\n}\r\nimg[_ngcontent-%COMP%] {\r\n  height: 200px;\r\n  width: 200px;\r\n}\r\n.content[_ngcontent-%COMP%] {\r\n  \r\n  margin-top: 20%;\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZXJyb3IvZXJyb3IuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLFlBQVk7QUFDZDtBQUNBO0VBQ0UsYUFBYTtFQUNiLFlBQVk7QUFDZDtBQUNBO0VBQ0UsaUJBQWlCO0VBQ2pCLGVBQWU7QUFDakIiLCJmaWxlIjoic3JjL2FwcC9lcnJvci9lcnJvci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmVycm9yIHtcclxuICBtYXJnaW46IDE1cHg7XHJcbn1cclxuaW1nIHtcclxuICBoZWlnaHQ6IDIwMHB4O1xyXG4gIHdpZHRoOiAyMDBweDtcclxufVxyXG4uY29udGVudCB7XHJcbiAgLypkaXNwbGF5OiBmbGV4OyovXHJcbiAgbWFyZ2luLXRvcDogMjAlO1xyXG59XHJcbiJdfQ== */"]
     });
     /*@__PURE__*/
