@@ -1,11 +1,14 @@
 const errorHandler = require('../utils/errorHandler')
 const Applicant = require('../models/Applicant')
 const Application = require('../models/Application')
+const User = require('../models/Users')
 
 module.exports.getAllApplications = async function (req, res) {
     try {
-
-        res.status(200).json({type: 'response'})
+        const apps = await Application.find({
+            user: req.user.id
+        }).select('status date name type logoUrl applicant').populate('applicant')
+        res.status(200).json(apps)
     } catch (e) {
         errorHandler(res, e)
     }
@@ -13,8 +16,11 @@ module.exports.getAllApplications = async function (req, res) {
 }
 module.exports.getApplicationById = async function (req, res) {
     try {
-
-        res.status(200).json()
+        const app = await Application.findOne({
+            user: req.user.id,
+            _id: req.params.id
+        })
+        res.status(200).json({app})
     } catch (e) {
         errorHandler(res, e)
     }
@@ -22,8 +28,10 @@ module.exports.getApplicationById = async function (req, res) {
 }
 module.exports.getAllApplicants = async function (req, res) {
     try {
-
-        res.status(200).json()
+        const apps = await Applicant.find({
+            user: req.user.id
+        })
+        res.status(200).json(apps)
     } catch (e) {
         errorHandler(res, e)
     }
@@ -31,8 +39,11 @@ module.exports.getAllApplicants = async function (req, res) {
 }
 module.exports.getApplicantById = async function (req, res) {
     try {
-
-        res.status(200).json()
+        const app = await Applicant.findOne({
+            user: req.user.id,
+            _id: req.params.id
+        })
+        res.status(200).json({app})
     } catch (e) {
         errorHandler(res, e)
     }
@@ -40,45 +51,26 @@ module.exports.getApplicantById = async function (req, res) {
 }
 module.exports.getMain = async function (req, res) {
     try {
-
-        res.status(200).json()
+        console.log('prepare...', req.user.id)
+        let appCount = 0
+        await Application.find({
+            user: req.user.id
+        }).count((err, count) => {
+            appCount = count
+        })
+        console.log('apps count is', appCount)
+        const candidate = await User.findOne({_id: req.user.id})
+        console.log('name is', candidate.username)
+        res.status(200).json({
+            name: candidate.username,
+            apps: appCount
+        })
     } catch (e) {
         errorHandler(res, e)
     }
 
 }
 
-// module.exports.saveNewApplication = async function (req, res) {
-//     try {
-//         // consol.log('welcome at register')
-//         // console.log('extracting user id', req.user.id)
-//         // const person =new Applicant(
-//         //     {
-//         //         title: req.body.applicantSavingName ? req.body.applicantSavingName : req.body.applicantName,
-//         //         type: req.body.applicantType,
-//         //         name: req.body.applicantName,
-//         //         inn: req.body.applicantInn,
-//         //         kpp: req.body.applicantKpp,
-//         //         ogrn: req.body.applicantOgrn ? req.body.applicantOgrn : '',
-//         //         address: req.body.applicantAddress,
-//         //         head: req.body.applicantHead ? req.body.applicantHead : '',
-//         //         // user: req.user.id
-//         //     }
-//         // )
-//         // await person.save((err, p) => {
-//         //
-//         // })
-//         // const application =new Application(
-//         //     {}
-//         // )
-//         // await application.save()
-//         // console.log('new applicant', Applicant)
-//         res.status(200).json({Applicant: 'ok'})
-//     } catch (e) {
-//         errorHandler(res, e)
-//     }
-//
-// }
 module.exports.saveNewPerson = async function (req, res) {
     try {
         const person =new Applicant(
@@ -106,6 +98,7 @@ module.exports.saveNewApplication = async function (req, res) {
                 ogrn: req.body.applicantOgrn ? req.body.applicantOgrn : '',
                 address: req.body.applicantAddress,
                 head: req.body.applicantHead ? req.body.applicantHead : '',
+                display: req.body.applicantCanSave,
                 user: req.user.id
             }
         )
