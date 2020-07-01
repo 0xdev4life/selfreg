@@ -22,7 +22,8 @@ module.exports.login = async function (req, res) {
                 }, keys.jwt, {expiresIn: keys.ExpireTime})
                 return await res.status(200).json({
                     token: `Bearer ${token}`,
-                    name: candidate.username
+                    name: candidate.username,
+                    email: candidate.email
                 })
             } else {
                 return await res.status(401).json({
@@ -68,6 +69,63 @@ module.exports.register = async function (req, res) {
     }
 }
 
+module.exports.check = async function (req, res) {
+
+    const candidate = await User.findOne({_id: req.user.id})
+    if (candidate) {
+        console.log('password', candidate)
+        const passwordResult = bcrypt.compareSync(req.body.password, candidate.password)
+        if (passwordResult) {
+
+            res.send(true)
+        } else {
+            res.send(false)
+        }
+    }
+}
+
+module.exports.update = async function (req, res) {
+
+    console.log('новый запрос', req.user, req.body)
+    const candidate = await User.findOne({_id: req.user.id})
+    if (candidate) {
+        console.log('old', candidate)
+        const passwordResult = bcrypt.compareSync(req.body.old, candidate.password)
+        if (passwordResult) {
+            const salt = await bcrypt.genSalt(12)
+            const password = await bcrypt.hash(req.body.password, salt)
+            const filter = {_id: req.user.id}
+            const update = {password: password}
+            let doc = await User.findOneAndUpdate(filter, update, {
+                new: true
+            });
+            console.log('new', doc)
+            res.status(200).json(
+                {action: 'SUCCESS'}
+            )
+        } else {
+            console.log('wrong pass')
+            res.status(409).json({
+                action: "WRONG_PASSWORD"
+            })
+        }
+        // res.status(409).json({
+        //     action: "EMAIL_ALREADY_EXISTS"
+        // })
+    }
+}
+
+module.exports.edit = async function (req, res) {
+
+    // console.log('новый запрос', req.user, req.body)
+    const update = {username: req.body.username, email: req.body.email}
+    const candidate = await User.findOneAndUpdate({_id: req.user.id}, update, {
+        new: true
+    })
+    // console.log(candidate)
+    if (candidate) {res.status(200).json(req.body)}
+    else {res.status(409)}
+}
 //===== postgres style
 // const { Pool, Client } = require('pg')
 // const client = new Client({

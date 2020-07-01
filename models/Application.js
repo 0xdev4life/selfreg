@@ -36,10 +36,22 @@ const applicationSchema = new Schema({
     },
     classes: [
         {
-            classId: {
-                ref: 'classes',
-                type: Schema.Types.ObjectId
-            }
+            Number: {
+                type: String,
+                default: ''
+            },
+            Categories: [
+                {
+                    Number: {
+                        type: String,
+                        default: ''
+                    },
+                    Title: {
+                        type: String,
+                        default: ''
+                    },
+                }
+            ]
         }
     ],
     applicant: {
