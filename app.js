@@ -30,7 +30,8 @@ require('./middleware/passport')(passport)
 
 
 app.use(morgan('dev'))
-
+app.use('/uploads', express.static('uploads'))
+app.use('/apps', express.static('apps'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 

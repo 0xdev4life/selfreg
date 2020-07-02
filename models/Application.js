@@ -80,6 +80,10 @@ const applicationSchema = new Schema({
         type: Number,
         required: true
     },
+    payed: {
+        type: Boolean,
+        default: false
+    },
     documents: [
         {
             type: {

@@ -4,7 +4,8 @@ const Application = require('../models/Application')
 const User = require('../models/Users')
 const docs = require('../utils/documents')
 const moment = require('moment')
-
+const fs = require('fs');
+const path = require('path');
 
 module.exports.getMain = async function (req, res) {
     try {
@@ -33,25 +34,35 @@ module.exports.getMain = async function (req, res) {
 
 module.exports.saveNewApplication = async function (req, res) {
     // console.log('look for image', req.file)
+
+    const data = moment().format('YYYY-MM-DD-HH-mm-ss-SSS')
+    var appDir = path.dirname(require.main.filename);
+    const dir = path.resolve(appDir, 'apps', `${data}-app`);
+    const url = `apps\\${data}-app`
+
+    // console.log('here is a new folder', dir)
+
+    fs.mkdir(dir, {recursive: true}, err => {})
+
     let appId = '';
-    console.log(req.body)
+    const person = new Applicant(
+        {
+            title: req.body.applicantSavingName ? req.body.applicantSavingName : '.' + req.body.applicantName,
+            type: req.body.applicantType,
+            name: req.body.applicantName,
+            inn: req.body.applicantInn,
+            kpp: req.body.applicantKpp,
+            ogrn: req.body.applicantOgrn ? req.body.applicantOgrn : '',
+            address: req.body.applicantAddress,
+            head: req.body.applicantHead ? req.body.applicantHead : '',
+            display: req.body.applicantCanSave,
+            user: req.user.id
+        }
+    )
+    // console.log(req.body)
     if (!req.body.applicantId) {
         // console.log('show them classes', req.body.trademarkClasses)
-        console.log('создаем нового ')
-        const person = new Applicant(
-            {
-                title: req.body.applicantSavingName ? req.body.applicantSavingName : '.' + req.body.applicantName,
-                type: req.body.applicantType,
-                name: req.body.applicantName,
-                inn: req.body.applicantInn,
-                kpp: req.body.applicantKpp,
-                ogrn: req.body.applicantOgrn ? req.body.applicantOgrn : '',
-                address: req.body.applicantAddress,
-                head: req.body.applicantHead ? req.body.applicantHead : '',
-                display: req.body.applicantCanSave,
-                user: req.user.id
-            }
-        )
+        // console.log('создаем нового ')
         // console.log(person)
         try {
             await person.save()
@@ -80,7 +91,7 @@ module.exports.saveNewApplication = async function (req, res) {
                         Number: cl.Number,
                         Title: cl.Title
                     }
-                    console.log('this is c', c, cl)
+                    // console.log('this is c', c, cl)
                     cats.push(c)
                 })
                 el.Categories = cats;
@@ -90,26 +101,43 @@ module.exports.saveNewApplication = async function (req, res) {
         // console.log('simple', clss)
         // console.log('создаем новую заявку ', req.body.trademarkType)
         const application = new Application({
-            status: 'created',
+            status: 'waiting',
             name: req.body.trademarkName,
             type: req.body.trademarkType,
             applicant: appId,
             mode: req.body.applicationMode,
             price: req.body.applicationPrice,
+            payed: false,
             tax: req.body.applicationTax,
             logoUrl: req.body.trademarkLogo ? req.body.trademarkLogo : '',
             logoDescr: req.body.trademarkLogoDescription ? req.body.trademarkLogoDescription : '',
             colors: req.body.trademarkColors ? req.body.trademarkColors : '',
             unsecure: req.body.trademarkUnsec ? req.body.trademarkUnsec : '',
             classes: clss,
-            // classes: req.body.trademarkName.map(c =>c.Classes).flat().map(elem => ({id : elem.value})),
             options: req.body.applicationCheckOption ? [{option: 'fullCheck', price: 7500}] : [],
             documents: [],
             user: req.user.id
 
         })
+        console.log('we are ready to create documents')
+        const tempResult = docs.createDocuments(person, application, dir)
+        if (tempResult) {
+            application.documents.push({
+                type: 'tax',
+                url: `${url}\\tax.docx`//path.resolve(dir, 'tax.docx')
+            })
+            application.documents.push({
+                type: 'proxy',
+                url: `${url}\\proxy.docx`//path.resolve(dir, 'proxy.docx')
+            })
+            application.documents.push({
+                type: 'permission',
+                url: `${url}\\permission.docx`//path.resolve(dir, 'permission.docx')
+            })
+        }
+        console.log('here is docs', application.documents)
         // application.
-        console.log('here is app', application)
+        // console.log('here is app', application)
         // application.applicant = newPerson.select() _id.toString()
         try {
             console.log('adding id')

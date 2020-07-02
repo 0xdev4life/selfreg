@@ -2,7 +2,8 @@ const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
 
 const fs = require('fs');
-const path = require('path');
+const pathLocal = require('path');
+
 
 // The error object contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
 function replaceErrors(key, value) {
@@ -30,18 +31,33 @@ function errorHandler(error) {
 }
 
 //Load the docx file as a binary
+var appDir = pathLocal.dirname(require.main.filename);
+
+console.log('appdir is', appDir)
+
+const taxInput = pathLocal.resolve(appDir, 'templates', 'tax.docx')
+const proxyInput = pathLocal.resolve(appDir, 'templates', 'proxy.docx')
+const permissionInput = pathLocal.resolve(appDir, 'templates', 'permission.docx')
+
+console.log('inputs are', taxInput, proxyInput, permissionInput)
+
+
 
 
 module.exports.createDocuments = (user, application, path) => {
 
-    const tax = fs
-        .readFileSync(path.resolve(__dirname, 'templates', 'tax.docx'), 'binary');
+    const taxOutput = pathLocal.resolve(path, 'tax.docx')
+    const proxyOutput = pathLocal.resolve(path, 'proxy.docx')
+    const permissionOutput = pathLocal.resolve(path, 'permission.docx')
 
-    const proxy = fs
-        .readFileSync(path.resolve(__dirname, 'templates', 'proxy.docx'), 'binary');
+    console.log('outputs are', taxOutput, proxyOutput, permissionOutput)
 
-    const permission = fs
-        .readFileSync(path.resolve(__dirname, 'templates', 'permission.docx'), 'binary');
+    console.log('lets read')
+    const tax = fs.readFileSync(taxInput, 'binary');
+    const proxy = fs.readFileSync(proxyInput, 'binary');
+    const permission = fs.readFileSync(permissionInput, 'binary');
+    console.log('we are done reading')
+
 
     let taxZip = new PizZip(tax);
     let proxyZip = new PizZip(proxy);
@@ -66,13 +82,15 @@ module.exports.createDocuments = (user, application, path) => {
     });
 
     proxyDoc.setData({
+         applicantInn: user.inn,
         applicantName: user.name,
-        tax: application.tax
+        applicantOgrn: user.ogrn
     });
 
     permissionDoc.setData({
+        trademarkName: application.name,
         applicantName: user.name,
-        tax: application.tax
+        applicantAddress: user.address
     });
 
     try {
@@ -89,15 +107,16 @@ module.exports.createDocuments = (user, application, path) => {
     var buf = taxDoc.getZip()
         .generate({type: 'nodebuffer'});
 // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-    fs.writeFileSync(path.resolve(path, 'tax.docx'), buf);
+    fs.writeFileSync(taxOutput, buf);
 
     buf = proxyDoc.getZip()
         .generate({type: 'nodebuffer'});
 // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-    fs.writeFileSync(path.resolve(path, 'proxy.docx'), buf);
+    fs.writeFileSync(proxyOutput, buf);
 
     buf = permissionDoc.getZip()
         .generate({type: 'nodebuffer'});
 // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-    fs.writeFileSync(path.resolve(path, 'permission.docx'), buf);
+    fs.writeFileSync(permissionOutput, buf);
+    return true;
 }
