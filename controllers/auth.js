@@ -146,26 +146,26 @@ module.exports.edit = async function (req, res) {
 //         if (err) {
 //             return console.log(err.stack)
 //         }
-        if (+values.rows[0].count !== 0) {
-            const passwordResult = bcrypt.compareSync(req.body.password, values.rows[0]['pass'])
-            if (passwordResult) {
-                res.status(200).json({
-                    authenticated: true,
-                    token: "ok",
-                    expire: 3600000
-                })
-            } else {
-                res.status(401).json({
-                    authenticated: false,
-                })
-            }
-
-        } else {
-            res.status(401).json({
-                authenticated: +values.rows[0].count
-            })
-            console.log(values.rows[0].count)
-        }
+//         if (+values.rows[0].count !== 0) {
+//             const passwordResult = bcrypt.compareSync(req.body.password, values.rows[0]['pass'])
+//             if (passwordResult) {
+//                 res.status(200).json({
+//                     authenticated: true,
+//                     token: "ok",
+//                     expire: 3600000
+//                 })
+//             } else {
+//                 res.status(401).json({
+//                     authenticated: false,
+//                 })
+//             }
+//
+//         } else {
+//             res.status(401).json({
+//                 authenticated: +values.rows[0].count
+//             })
+//             console.log(values.rows[0].count)
+//         }
 //     })
 //
 //
