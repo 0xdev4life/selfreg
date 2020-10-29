@@ -60,12 +60,17 @@ module.exports.stepUp = async function (req, res) {
 
 }
 
-module.exports.Search = async function (req, res) {
+module.exports.search = async function (req, res) {
     try {
-        console.log('query', req.query.q)
-        res.status(200).json(req.query)
+        const resp = {
+            state: 'accept'
+        }
+        console.log('old style', resp)
+        res.status(200).json(resp)
     } catch (e) {
         errorHandler(res, e)
     }
 
 }
+
+

@@ -11,7 +11,9 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), controller.ge
 
 router.get('/children/:id', passport.authenticate('jwt', {session: false}), controller.getChildren)
 
-router.get('/search/', passport.authenticate('jwt', {session: false}), controller.Search)
+router.get('/search/', passport.authenticate('jwt', {session: false}), controller.search)
+
+// router.get('/match/', passport.authenticate('jwt', {session: false}), controller.match)
 
 router.get('/up/:id', passport.authenticate('jwt', {session: false}), controller.stepUp)
 // router.post('/register', controller.register)

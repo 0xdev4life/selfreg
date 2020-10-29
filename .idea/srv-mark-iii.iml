@@ -9,5 +9,6 @@
     <orderEntry type="library" name="@types/mongoose" level="application" />
     <orderEntry type="library" name="@types/passport" level="application" />
     <orderEntry type="library" name="@types/pizzip" level="application" />
+    <orderEntry type="library" name="@types/needle" level="application" />
   </component>
 </module>
