@@ -33,13 +33,13 @@ function errorHandler(error) {
 //Load the docx file as a binary
 var appDir = pathLocal.dirname(require.main.filename);
 
-console.log('appdir is', appDir)
+// console.log('appdir is', appDir)
 
 const taxInput = pathLocal.resolve(appDir, 'templates', 'tax.docx')
 const proxyInput = pathLocal.resolve(appDir, 'templates', 'proxy.docx')
 const permissionInput = pathLocal.resolve(appDir, 'templates', 'permission.docx')
 
-console.log('inputs are', taxInput, proxyInput, permissionInput)
+// console.log('inputs are', taxInput, proxyInput, permissionInput)
 
 
 
@@ -50,13 +50,13 @@ module.exports.createDocuments = (user, application, path) => {
     const proxyOutput = pathLocal.resolve(path, 'proxy.docx')
     const permissionOutput = pathLocal.resolve(path, 'permission.docx')
 
-    console.log('outputs are', taxOutput, proxyOutput, permissionOutput)
+    // console.log('outputs are', taxOutput, proxyOutput, permissionOutput)
 
-    console.log('lets read')
+    // console.log('lets read')
     const tax = fs.readFileSync(taxInput, 'binary');
     const proxy = fs.readFileSync(proxyInput, 'binary');
     const permission = fs.readFileSync(permissionInput, 'binary');
-    console.log('we are done reading')
+    // console.log('we are done reading')
 
 
     let taxZip = new PizZip(tax);
